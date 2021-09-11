@@ -12,6 +12,9 @@ class TSet
 private:
   size_t maxPower;    // максимальная мощность множества
   TBitField bitField; // битовое поле для хранения характеристического вектора
+
+  template <typename T>
+  TSet(T mp);
 public:
   TSet(size_t mp);
   TSet(const TSet &s);       // конструктор копирования
@@ -28,9 +31,9 @@ public:
   bool operator==(const TSet &s) const; // сравнение
   bool operator!=(const TSet &s) const; // сравнение
   TSet& operator=(const TSet &s);  // присваивание
-  TSet operator+(const uint elem); // объединение с элементом
+  TSet operator+(const uint &elem); // объединение с элементом
                                    // элемент должен быть из того же универса
-  TSet operator-(const uint elem); // разность с элементом
+  TSet operator-(const uint &elem); // разность с элементом
                                    // элемент должен быть из того же универса
   TSet operator+(const TSet &s);   // объединение
   TSet operator*(const TSet &s);   // пересечение
