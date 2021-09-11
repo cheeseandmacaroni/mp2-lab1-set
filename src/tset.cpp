@@ -15,7 +15,7 @@ TSet::TSet(size_t mp) : maxPower(mp), bitField(mp) {}
 TSet::TSet(const TSet &s) : maxPower(s.getMaxPower()), bitField(s.bitField) {}
 
 // конструктор преобразования типа
-TSet::TSet(const TBitField &bf) :maxPower(bf.getLength()), bitField(bf) {}
+TSet::TSet(const TBitField &bf) : maxPower(bf.getLength()), bitField(bf) {}
 
 TSet::operator TBitField()
 {
@@ -135,8 +135,7 @@ TSet TSet::operator*(const TSet &s) // пересечение
 
 TSet TSet::operator~() // дополнение
 {
-	TSet res(0);
-	res = TSet(~bitField);
+	TSet res(~bitField);
     return res;
 }
 

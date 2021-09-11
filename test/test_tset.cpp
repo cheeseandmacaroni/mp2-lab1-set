@@ -308,8 +308,8 @@ TEST(TSet, testCoutInsClearPlusMinus)
     set.insElem(1);
     set.delElem(1);
     set.delElem(1);
-    set1 = set1 + 1 + 3 + 5 + 12;
+    //set1 = set1 + 1 + 3 + 5 + 12;
     set1 = set1 - 1 - 3 - 5 - 12;
-    set1 = set1 - 1;
+    //set1 = set1 - 1;
     EXPECT_EQ(expSet, set1 + set + set1);
 }

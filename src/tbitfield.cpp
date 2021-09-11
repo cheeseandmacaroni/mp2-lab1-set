@@ -21,7 +21,18 @@ TBitField::TBitField(size_t len):bitLen(len)
 
 TBitField::TBitField(const TBitField &bf) // конструктор копирования
 {
-	*this = bf;
+	bitLen = bf.getLength();
+	memLen = getIndex(bitLen) + 1;
+	pMem = new uint[memLen];
+	for (size_t i = 0; i < memLen; ++i)
+	{
+		pMem[i] = 0;
+	}
+	for (size_t i = 0; i < bitLen; ++i)
+	{
+		if (bf.getBit(i))
+			setBit(i);
+	}
 }
 
 size_t TBitField::getIndex(const size_t n) const  // индекс в pМем для бита n
@@ -75,8 +86,7 @@ TBitField& TBitField::operator=(const TBitField &bf) // присваивание
 {
 	if (*this != bf)
 	{
-		if(pMem != nullptr)
-			delete[] pMem;
+		delete[] pMem;
 		bitLen = bf.getLength();
 		memLen = getIndex(bitLen) + 1;
 		pMem = new uint[memLen];
@@ -156,12 +166,10 @@ TBitField TBitField::operator&(const TBitField &bf) // операция "и"
 
 TBitField TBitField::operator~() // отрицание
 {
-	TBitField res(*this);
+	TBitField res(this->getLength());
 	for (size_t i = 0; i < bitLen; ++i)
 	{
-		if (res.getBit(i))
-			res.clrBit(i);
-		else if (!res.getBit(i))
+		if (!getBit(i))
 			res.setBit(i);
 	}
     return res;
