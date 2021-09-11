@@ -135,7 +135,8 @@ TSet TSet::operator*(const TSet &s) // пересечение
 
 TSet TSet::operator~() // дополнение
 {
-	TSet res(~bitField);
+	TSet res(0);
+	res = TSet(~bitField);
     return res;
 }
 
