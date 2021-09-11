@@ -13,8 +13,6 @@ private:
   size_t maxPower;    // максимальная мощность множества
   TBitField bitField; // битовое поле для хранения характеристического вектора
 
-  template <typename T>
-  TSet(T mp);
 public:
   TSet(size_t mp);
   TSet(const TSet &s);       // конструктор копирования
