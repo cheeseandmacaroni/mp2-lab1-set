@@ -44,7 +44,7 @@ void TBitField::setBit(const size_t n) // установить бит
 {
 	if (n > bitLen - 1)
 	{
-		throw std::exception("Bad index");
+		throw std::exception();
 	}
 	char bit = n % (8 * sizeof(uint));
 	pMem[getIndex(n)] |= getMask(bit);
@@ -54,7 +54,7 @@ void TBitField::clrBit(const size_t n) // очистить бит
 {
 	if (n > bitLen - 1)
 	{
-		throw std::exception("Bad index");
+		throw std::exception();
 	}
 	char bit = n % (8 * sizeof(uint));
 	pMem[getIndex(n)] &= ~getMask(bit);
@@ -64,7 +64,7 @@ bool TBitField::getBit(const size_t n) const // получить значени�
 {
 	if (n > bitLen - 1)
 	{
-		throw std::exception("Bad index");
+		throw std::exception();
 	}
 	char bit = n % (8 * sizeof(uint));
     return ((pMem[getIndex(n)] & getMask(bit)) >> bit);
@@ -172,7 +172,7 @@ std::istream &operator>>(std::istream &istr, TBitField &bf) // ввод
 	{
 		istr >> bit;
 		if (!istr)
-			throw std::exception("Bad input");
+			throw std::exception();
 		if (bit)
 			bf.setBit(i);
 		++i;

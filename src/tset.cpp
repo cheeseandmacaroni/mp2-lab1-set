@@ -38,7 +38,7 @@ bool TSet::isMember(const uint elem) const // элемент множества?
 void TSet::insElem(const uint elem) // включение элемента множества
 {
 	if (elem > maxPower - 1 || elem < 0)
-		throw std::exception("Bad index");
+		throw std::exception();
 	else
 	{
 		bitField.setBit(elem);
@@ -48,7 +48,7 @@ void TSet::insElem(const uint elem) // включение элемента мн�
 void TSet::delElem(const uint elem) // исключение элемента множества
 {
 	if (elem > maxPower - 1 || elem < 0)
-		throw std::exception("Bad index");
+		throw std::exception();
 	else
 	{
 		bitField.clrBit(elem);
@@ -105,7 +105,7 @@ TSet TSet::operator+(const uint &elem) // объединение с элемен
 	}
 	else if (elem < 0)
 	{
-		throw std::exception("Bad element");
+		throw std::exception();
 	}
 }
 
@@ -123,7 +123,7 @@ TSet TSet::operator-(const uint &elem) // разность с элементом
 	}
 	else if (elem < 0)
 	{
-		throw std::exception("Bad element");
+		throw std::exception();
 	}
 }
 
