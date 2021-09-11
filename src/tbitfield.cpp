@@ -121,7 +121,7 @@ bool TBitField::operator!=(const TBitField &bf) const // сравнение
     return false;
 }
 
-TBitField TBitField::operator|(const TBitField &bf) // операция "или"
+TBitField TBitField::operator|(const TBitField &bf) // операция "или"//
 {
 	TBitField max(0), min(0);
 	if(bitLen >= bf.getLength())
