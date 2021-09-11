@@ -123,8 +123,17 @@ bool TBitField::operator!=(const TBitField &bf) const // сравнение
 
 TBitField TBitField::operator|(const TBitField &bf) // операция "или"
 {
-	TBitField min = bitLen <= bf.getLength() ? *this : bf;
-	TBitField max = bitLen > bf.getLength() ? *this : bf;
+	TBitField max(0), min(0);
+	if(bitLen >= bf.getLength())
+	{
+		min = bf;
+		max = *this;
+	}
+	else if (bitLen < bf.getLength())
+	{
+		max = bf;
+		min = *this;
+	}
 	for (size_t i = 0; i < min.getLength(); ++i)
 	{
 		if(min.getBit(i))
