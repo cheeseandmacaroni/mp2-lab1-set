@@ -272,3 +272,94 @@ TEST(TBitField, bitfields_with_different_bits_are_not_equal)
 
     EXPECT_NE(bf1, bf2);
 }
+
+//new
+
+TEST(TBitField, can_work_with_big_bitfield)
+{
+	TBitField bf(64);
+	ASSERT_NO_THROW(bf.setBit(38));
+	ASSERT_NO_THROW(bf.setBit(55));
+	ASSERT_NO_THROW(bf.clrBit(38));
+	ASSERT_NO_THROW(bf.clrBit(55));
+	ASSERT_NO_THROW(bf.getBit(38));
+	ASSERT_NO_THROW(bf.getBit(55));
+}
+
+TEST(TBitField, or_operator_applied_to_big_bitfields_of_non_equal_size)
+{
+	const size_t size1 = 35, size2 = 47;
+	TBitField bf1(size1), bf2(size2), expBf(size2);
+	bf1.setBit(22);
+	bf1.setBit(33);
+
+	bf2.setBit(22);
+	bf2.setBit(43);
+
+	expBf.setBit(22);
+	expBf.setBit(33);
+	expBf.setBit(43);
+	EXPECT_EQ(expBf, bf1 | bf2);
+}
+
+TEST(TBitField, and_operator_applied_to_big_bitfields_of_non_equal_size)
+{
+	const size_t size1 = 35, size2 = 47;
+	TBitField bf1(size1), bf2(size2), expBf(size2);
+	bf1.setBit(22);
+	bf1.setBit(33);
+
+	bf2.setBit(22);
+	bf2.setBit(43);
+
+	expBf.setBit(22);
+	EXPECT_EQ(expBf, bf1 & bf2);
+}
+
+TEST(TBitField, can_read_bitfield)
+{
+	TBitField bf(3);
+	bf.setBit(1);
+	bf.setBit(2);
+	std::stringstream test_stream;
+	std::string final = "110";
+	std::string out;
+	test_stream << bf;
+	test_stream >> out;
+	EXPECT_EQ(final, out);
+}
+
+TEST(TBitField, can_write_to_bitfield)
+{
+	TBitField bf1(5);
+	bf1.setBit(0);
+	bf1.setBit(1);
+	bf1.setBit(3);
+	bf1.setBit(4);
+	TBitField bf2(5);
+	std::stringstream test_stream;
+	test_stream << "11011";
+	test_stream >> bf2;
+	EXPECT_EQ(bf1, bf2);
+}
+
+TEST(TBitField, can_write_to_bitfield_of_nonequal_size)
+{
+	TBitField bf1(3);
+	bf1.setBit(1);
+	bf1.setBit(2);
+	TBitField bf2(0);
+	std::stringstream test_stream;
+	test_stream << "110";
+	test_stream >> bf2;
+	EXPECT_EQ(bf1, bf2);
+}
+
+TEST(TBitField, throws_when_wrong_input)
+{
+	std::stringstream test_stream;
+	std::string input = "2100";
+	TBitField bf(0);
+	test_stream << input;
+	ASSERT_ANY_THROW(test_stream >> bf);
+}

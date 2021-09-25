@@ -37,8 +37,8 @@ bool TSet::isMember(const uint elem) const // элемент множества?
 
 void TSet::insElem(const uint elem) // включение элемента множества
 {
-	if (elem > maxPower - 1 || elem < 0)
-		throw std::exception();
+	if (elem > maxPower - 1)
+		throw "Bad index";
 	else
 	{
 		bitField.setBit(elem);
@@ -47,8 +47,8 @@ void TSet::insElem(const uint elem) // включение элемента мн�
 
 void TSet::delElem(const uint elem) // исключение элемента множества
 {
-	if (elem > maxPower - 1 || elem < 0)
-		throw std::exception();
+	if (elem > maxPower - 1)
+		throw "Bad index";
 	else
 	{
 		bitField.clrBit(elem);
@@ -97,21 +97,17 @@ TSet TSet::operator+(const uint &elem) // объединение с элемен
 		res.bitField.setBit(elem);
 		return res;
 	}
-	else if (elem < maxPower && elem >= 0)
+	else if (elem < maxPower)
 	{
 		TSet res(bitField);
 		res.bitField.setBit(elem);
 		return res;
 	}
-	else if (elem < 0)
-	{
-		throw std::exception();
-	}
 }
 
 TSet TSet::operator-(const uint &elem) // разность с элементом
 {
-	if (elem < maxPower && elem >= 0)
+	if (elem < maxPower)
 	{
 		TSet res(bitField);
 		res.bitField.clrBit(elem);
@@ -120,10 +116,6 @@ TSet TSet::operator-(const uint &elem) // разность с элементом
 	else if (elem >= maxPower)
 	{
 		return TSet(bitField);
-	}
-	else if (elem < 0)
-	{
-		throw std::exception();
 	}
 }
 
@@ -143,6 +135,7 @@ TSet TSet::operator~() // дополнение
 std::istream &operator>>(std::istream &istr, TSet &s) // ввод
 {
 	istr >> s.bitField;
+	s.maxPower = s.bitField.getLength();
     return istr;
 }
 

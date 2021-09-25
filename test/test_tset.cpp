@@ -308,8 +308,34 @@ TEST(TSet, testCoutInsClearPlusMinus)
     set.insElem(1);
     set.delElem(1);
     set.delElem(1);
-    //set1 = set1 + 1 + 3 + 5 + 12;
+    set1 = set1 + 1 + 3 + 5 + 12;
     set1 = set1 - 1 - 3 - 5 - 12;
-    //set1 = set1 - 1;
+    set1 = set1 - 1;
     EXPECT_EQ(expSet, set1 + set + set1);
+}
+
+//new
+
+TEST(TSet, check_conversion_operator)
+{
+	TBitField bf(5);
+	bf.setBit(3);
+
+	TSet s1(bf);
+	TSet s2(5);
+	s2.insElem(3);
+
+	EXPECT_EQ(s1, s2);
+}
+
+TEST(TSet, can_read_set)
+{
+	std::stringstream input_stream;
+	input_stream << "1010";
+	TSet set1(0);
+	input_stream >> set1;
+	TSet set2(4);
+	set2.insElem(1);
+	set2.insElem(3);
+	EXPECT_EQ(1, set2 == set1);
 }

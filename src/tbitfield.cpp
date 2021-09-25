@@ -7,6 +7,7 @@
 
 #include <limits>
 #include <iostream>
+#include <sstream>
 #include "tbitfield.h"
 
 TBitField::TBitField(size_t len):bitLen(len)
@@ -55,7 +56,7 @@ void TBitField::setBit(const size_t n) // установить бит
 {
 	if (n > bitLen - 1)
 	{
-		throw std::exception();
+		throw "Bad bit";
 	}
 	char bit = n % (8 * sizeof(uint));
 	pMem[getIndex(n)] |= getMask(bit);
@@ -65,7 +66,7 @@ void TBitField::clrBit(const size_t n) // очистить бит
 {
 	if (n > bitLen - 1)
 	{
-		throw std::exception();
+		throw "Bad bit";
 	}
 	char bit = n % (8 * sizeof(uint));
 	pMem[getIndex(n)] &= ~getMask(bit);
@@ -75,7 +76,7 @@ bool TBitField::getBit(const size_t n) const // получить значени�
 {
 	if (n > bitLen - 1)
 	{
-		throw std::exception();
+		throw "Bad bit";
 	}
 	char bit = n % (8 * sizeof(uint));
     return ((pMem[getIndex(n)] & getMask(bit)) >> bit);
@@ -86,6 +87,7 @@ TBitField& TBitField::operator=(const TBitField &bf) // присваивание
 {
 	if (*this != bf)
 	{
+		if(pMem != nullptr)
 		delete[] pMem;
 		bitLen = bf.getLength();
 		memLen = getIndex(bitLen) + 1;
@@ -183,16 +185,21 @@ TBitField::~TBitField()
 // ввод/вывод
 std::istream &operator>>(std::istream &istr, TBitField &bf) // ввод
 {
-	size_t i = 0;
-	bool bit;
-	while (!istr.eof())
+	size_t size;
+	std::string in_string;
+	istr >> in_string;
+	if(istr.fail()) 
+		throw "Bad input";
+	size = in_string.length();
+	bf = TBitField(size);
+	for (int i = 0; i < size; ++i)
 	{
-		istr >> bit;
-		if (!istr)
-			throw std::exception();
-		if (bit)
-			bf.setBit(i);
-		++i;
+		if(in_string[i] == '1')
+			bf.setBit(size - i - 1);
+		else if (in_string[i] != '1' && in_string[i] != '0')
+		{
+			throw "Bad input";
+		}
 	}
     return istr;
 }
@@ -201,9 +208,9 @@ std::ostream &operator<<(std::ostream &ostr, const TBitField &bf) // вывод
 {
 	try
 	{
-		for (size_t i = 0; i < bf.getLength(); ++i)
+		for (size_t i = bf.getLength(); i > 0; --i)
 		{
-			ostr << bf.getBit(i) << ' ';
+			ostr << bf.getBit(i - 1);
 		}
 	}
 	catch (std::exception &error)
