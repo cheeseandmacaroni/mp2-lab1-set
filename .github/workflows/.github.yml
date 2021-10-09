@@ -17,8 +17,6 @@ jobs:
       run: |
         echo $PATH
         ls -a
-        unzip -P ${{secrets.TEST_SECRET_VALUE}} test/test_secret_tbitfield.zip test_secret_tbitfield.cpp
-        mv test_secret_tbitfield.cpp test
         cd build/
         cmake -DCMAKE_BUILD_TYPE=Release .. && make -j 2
         cd bin/
