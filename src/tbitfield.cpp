@@ -12,7 +12,9 @@
 
 TBitField::TBitField(size_t len):bitLen(len)
 {
-	memLen = getIndex(bitLen) + 1;
+	memLen = getIndex(bitLen);
+	if ((bitLen % (sizeof(elType) * 8)) != 0)
+		memLen++;
 	pMem = new elType[memLen];
 	for (size_t i =0; i < memLen; ++i)
 	{

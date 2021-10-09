@@ -202,16 +202,16 @@ TEST(TBitField, can_invert_bitfield)
 
 TEST(TBitField, can_invert_large_bitfield)
 {
-    const size_t size = 38;
-    TBitField bf(size), negBf(size), expNegBf(size);
-    bf.setBit(35);
-    negBf = ~bf;
+	const size_t size = 38;
+	TBitField bf(size), negBf(size), expNegBf(size);
+	bf.setBit(35);
+	negBf = ~bf;
 
-    for(size_t i = 0; i < size; i++)
-        expNegBf.setBit(i);
-    expNegBf.clrBit(35);
+	for (size_t i = 0; i < size; i++)
+		expNegBf.setBit(i);
+	expNegBf.clrBit(35);
 
-    EXPECT_EQ(expNegBf, negBf);
+	EXPECT_EQ(expNegBf, negBf);
 }
 
 TEST(TBitField, invert_plus_and_operator_on_different_size_bitfield)
@@ -235,28 +235,28 @@ TEST(TBitField, invert_plus_and_operator_on_different_size_bitfield)
 
 TEST(TBitField, can_invert_many_random_bits_bitfield)
 {
-    const size_t size = 38;
-    TBitField bf(size), negBf(size), expNegBf(size);
+	const size_t size = 38;
+	TBitField bf(size), negBf(size), expNegBf(size);
 
-    std::vector<elType> bits;
-    bits.push_back(0);
-    bits.push_back(1);
-    bits.push_back(14);
-    bits.push_back(16);
-    bits.push_back(33);
-    bits.push_back(37);
+	std::vector<elType> bits;
+	bits.push_back(0);
+	bits.push_back(1);
+	bits.push_back(14);
+	bits.push_back(16);
+	bits.push_back(33);
+	bits.push_back(37);
 
-    for (size_t i = 0; i < bits.size(); i++)
-        bf.setBit(bits[i]);
+	for (size_t i = 0; i < bits.size(); i++)
+		bf.setBit(bits[i]);
 
-    negBf = ~bf;
+	negBf = ~bf;
 
-    for(size_t i = 0; i < size; i++)
-        expNegBf.setBit(i);
-    for (size_t i = 0; i < bits.size(); i++)
-        expNegBf.clrBit(bits[i]);
+	for (size_t i = 0; i < size; i++)
+		expNegBf.setBit(i);
+	for (size_t i = 0; i < bits.size(); i++)
+		expNegBf.clrBit(bits[i]);
 
-    EXPECT_EQ(expNegBf, negBf);
+	EXPECT_EQ(expNegBf, negBf);
 }
 
 TEST(TBitField, bitfields_with_different_bits_are_not_equal)
