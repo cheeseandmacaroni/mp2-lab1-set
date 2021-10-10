@@ -255,7 +255,6 @@ TEST(TBitField, can_invert_many_random_bits_bitfield)
 		expNegBf.setBit(i);
 	for (size_t i = 0; i < bits.size(); i++)
 		expNegBf.clrBit(bits[i]);
-
 	EXPECT_EQ(expNegBf, negBf);
 }
 

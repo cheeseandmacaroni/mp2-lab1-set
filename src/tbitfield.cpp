@@ -45,7 +45,7 @@ size_t TBitField::getIndex(const size_t n) const  // индекс в pМем д�
 
 elType TBitField::getMask(const size_t n) const // битовая маска для бита n
 {
-	return 1 << n;
+	return (elType)(1 << n);
 }
 
 // доступ к битам битового поля
