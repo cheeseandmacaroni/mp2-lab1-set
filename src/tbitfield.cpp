@@ -1,22 +1,14 @@
-// ННГУ, ВМК, Курс "Методы программирования-2", С++, ООП
-//
-// tbitfield.cpp - Copyright (c) Гергель В.П. 07.05.2001
-// Переработано для Microsoft Visual Studio 2008 Сысоевым А.В. (19.04.2015)
-// Переработано в соответсвии с C++11 (частично) Пановым А.А. 2021
-// Битовое поле
-
-#include <limits>
+#include "tbitfield.h"
 #include <iostream>
 #include <sstream>
-#include "tbitfield.h"
 
-TBitField::TBitField(size_t len):bitLen(len)
+TBitField::TBitField(size_t len) :bitLen(len)
 {
 	memLen = getIndex(bitLen);
 	if ((bitLen % (sizeof(elType) * 8)) != 0)
 		memLen++;
 	pMem = new elType[memLen];
-	for (size_t i =0; i < memLen; ++i)
+	for (size_t i = 0; i < memLen; ++i)
 	{
 		pMem[i] = 0;
 	}
@@ -40,23 +32,24 @@ TBitField::TBitField(const TBitField &bf) // конструктор копиро
 
 size_t TBitField::getIndex(const size_t n) const  // индекс в pМем для бита n
 {
-    return n / (8 *sizeof(elType));
+	return n / (8 * sizeof(elType));
 }
 
 elType TBitField::getMask(const size_t n) const // битовая маска для бита n
 {
-	return (elType)(1 << n);
+	elType res = (elType)1 << n;
+	return res;
 }
 
 // доступ к битам битового поля
 size_t TBitField::getLength() const // получить длину (к-во битов)
 {
-    return bitLen;
+	return bitLen;
 }
 
 size_t TBitField::getNumBytes() const // получить количество байт выделенной памяти
 {
-    return memLen * sizeof(elType);
+	return memLen * sizeof(elType);
 }
 
 void TBitField::setBit(const size_t n) // установить бит
@@ -65,7 +58,7 @@ void TBitField::setBit(const size_t n) // установить бит
 	{
 		throw "Bad bit";
 	}
-	char bit = n % (8 * sizeof(elType));
+	size_t bit = n % (8 * sizeof(elType));
 	pMem[getIndex(n)] |= getMask(bit);
 }
 
@@ -86,7 +79,7 @@ bool TBitField::getBit(const size_t n) const // получить значени�
 		throw "Bad bit";
 	}
 	char bit = n % (8 * sizeof(elType));
-    return ((pMem[getIndex(n)] & getMask(bit)) >> bit);
+	return ((pMem[getIndex(n)] & getMask(bit)) >> bit);
 }
 
 // битовые операции
@@ -94,8 +87,8 @@ TBitField& TBitField::operator=(const TBitField &bf) // присваивание
 {
 	if (*this != bf)
 	{
-		if(pMem != nullptr)
-		delete[] pMem;
+		if (pMem != nullptr)
+			delete[] pMem;
 		bitLen = bf.getLength();
 		memLen = getIndex(bitLen) + 1;
 		pMem = new elType[memLen];
@@ -109,7 +102,7 @@ TBitField& TBitField::operator=(const TBitField &bf) // присваивание
 				setBit(i);
 		}
 	}
-    return *this;
+	return *this;
 }
 
 bool TBitField::operator==(const TBitField &bf) const // сравнение
@@ -123,7 +116,7 @@ bool TBitField::operator==(const TBitField &bf) const // сравнение
 		if (bf.getBit(i) != getBit(i))
 			return false;
 	}
-    return true;
+	return true;
 }
 
 bool TBitField::operator!=(const TBitField &bf) const // сравнение
@@ -137,13 +130,13 @@ bool TBitField::operator!=(const TBitField &bf) const // сравнение
 		if (bf.getBit(i) != getBit(i))
 			return true;
 	}
-    return false;
+	return false;
 }
 
 TBitField TBitField::operator|(const TBitField &bf) // операция "или"//
 {
 	TBitField max(0), min(0);
-	if(bitLen >= bf.getLength())
+	if (bitLen >= bf.getLength())
 	{
 		min = bf;
 		max = *this;
@@ -155,10 +148,10 @@ TBitField TBitField::operator|(const TBitField &bf) // операция "или"
 	}
 	for (size_t i = 0; i < min.getLength(); ++i)
 	{
-		if(min.getBit(i))
+		if (min.getBit(i))
 			max.setBit(i);
 	}
-    return max;
+	return max;
 }
 
 TBitField TBitField::operator&(const TBitField &bf) // операция "и"
@@ -170,7 +163,7 @@ TBitField TBitField::operator&(const TBitField &bf) // операция "и"
 		if (getBit(i) & bf.getBit(i))
 			res.setBit(i);
 	}
-    return res;
+	return res;
 }
 
 TBitField TBitField::operator~() // отрицание
@@ -178,10 +171,10 @@ TBitField TBitField::operator~() // отрицание
 	TBitField res(this->getLength());
 	for (size_t i = 0; i < bitLen; ++i)
 	{
-		if (!getBit(i))
+		if (getBit(i) == 0)
 			res.setBit(i);
 	}
-    return res;
+	return res;
 }
 
 TBitField::~TBitField()
@@ -195,20 +188,20 @@ std::istream &operator>>(std::istream &istr, TBitField &bf) // ввод
 	size_t size;
 	std::string in_string;
 	istr >> in_string;
-	if(istr.fail()) 
+	if (istr.fail())
 		throw "Bad input";
 	size = in_string.length();
 	bf = TBitField(size);
-	for (int i = 0; i < size; ++i)
+	for (size_t i = 0; i < size; ++i)
 	{
-		if(in_string[i] == '1')
+		if (in_string[i] == '1')
 			bf.setBit(size - i - 1);
 		else if (in_string[i] != '1' && in_string[i] != '0')
 		{
 			throw "Bad input";
 		}
 	}
-    return istr;
+	return istr;
 }
 
 std::ostream &operator<<(std::ostream &ostr, const TBitField &bf) // вывод
@@ -224,5 +217,5 @@ std::ostream &operator<<(std::ostream &ostr, const TBitField &bf) // вывод
 	{
 		throw error;
 	}
-    return ostr;
+	return ostr;
 }
