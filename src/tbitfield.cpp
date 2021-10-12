@@ -14,20 +14,9 @@ TBitField::TBitField(size_t len) :bitLen(len)
 	}
 }
 
-TBitField::TBitField(const TBitField &bf) // конструктор копирования
+TBitField::TBitField(const TBitField &bf):pMem(nullptr), bitLen(0) // конструктор копирования
 {
-	bitLen = bf.getLength();
-	memLen = getIndex(bitLen) + 1;
-	pMem = new elType[memLen];
-	for (size_t i = 0; i < memLen; ++i)
-	{
-		pMem[i] = 0;
-	}
-	for (size_t i = 0; i < bitLen; ++i)
-	{
-		if (bf.getBit(i))
-			setBit(i);
-	}
+	*this = bf;
 }
 
 size_t TBitField::getIndex(const size_t n) const  // индекс в pМем для бита n
@@ -37,7 +26,7 @@ size_t TBitField::getIndex(const size_t n) const  // индекс в pМем д�
 
 elType TBitField::getMask(const size_t n) const // битовая маска для бита n
 {
-	elType res = (elType)1 << n;
+	elType res = static_cast<elType>(1) << n;
 	return res;
 }
 
@@ -90,7 +79,9 @@ TBitField& TBitField::operator=(const TBitField &bf) // присваивание
 		if (pMem != nullptr)
 			delete[] pMem;
 		bitLen = bf.getLength();
-		memLen = getIndex(bitLen) + 1;
+		memLen = getIndex(bitLen);
+		if ((bitLen % (sizeof(elType) * 8)) != 0)
+			memLen++;
 		pMem = new elType[memLen];
 		for (size_t i = 0; i < memLen; ++i)
 		{
@@ -168,11 +159,21 @@ TBitField TBitField::operator&(const TBitField &bf) // операция "и"
 
 TBitField TBitField::operator~() // отрицание
 {
-	TBitField res(this->getLength());
-	for (size_t i = 0; i < bitLen; ++i)
+	for (size_t i = 0; i < memLen - 1; ++i)
 	{
-		if (getBit(i) == 0)
+		this->pMem[i] = ~(this->pMem[i]);
+	}
+	TBitField res(*this);
+	for (size_t i = sizeof(elType) * 8 * (memLen - 1); i < bitLen; ++i)
+	{
+		if (!getBit(i))
+		{
 			res.setBit(i);
+		}
+		else if (getBit(i))
+		{
+			res.clrBit(i);
+		}
 	}
 	return res;
 }
